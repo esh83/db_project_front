@@ -8,7 +8,7 @@ export default function AlbumItem({ item }: { item: any }) {
       href={`/albums/${item.id}`}
     >
       <Image
-        src={item.image_url ?? "/img/music.png"}
+        src={item.image_url ?? "/img/music.jpg"}
         className="w-full rounded shadow"
         alt="image"
         width={200}

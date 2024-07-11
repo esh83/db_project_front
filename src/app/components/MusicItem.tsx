@@ -7,14 +7,16 @@ import {
   MdPlaylistAddCheck,
 } from "react-icons/md";
 import Modal from "./Modal";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { axiosCustom } from "../utils/config";
 import toast from "react-hot-toast";
+import { musicPlayCtx } from "../context/MusicPlayProvider";
 
 export default function MusicItem({ musicObject }: { musicObject: any }) {
   const [show, setShow] = useState(false);
   const [playlists, setPlayLists] = useState([]);
   const [islike, setIsLike] = useState(musicObject?.liked ?? false);
+  const [music, setMusic] = useContext(musicPlayCtx);
   useEffect(() => {
     (async () => {
       try {
@@ -35,7 +37,6 @@ export default function MusicItem({ musicObject }: { musicObject: any }) {
     } catch (err) {
       toast.error("failed to add to paylist");
       console.log(err);
-      
     }
   };
   const hanldeLike = async () => {
@@ -88,13 +89,15 @@ export default function MusicItem({ musicObject }: { musicObject: any }) {
       />
       <div className="bg-gray-900 shadow-lg rounded p-3">
         <div className="group relative">
+          <div className="h-60">
           <Image
             className="w-full h-full max-h-60 object-cover block rounded"
-            src={musicObject.image_url ?? "/img/music.png"}
+            src={musicObject.image_url ?? "/img/music.jpg"}
             alt="music image"
             width={300}
             height={300}
           />
+          </div>
           <div className="absolute bg-black rounded bg-opacity-0 group-hover:bg-opacity-60 w-full h-full top-0 flex items-center group-hover:opacity-100 transition justify-evenly">
             <button
               onClick={() => hanldeLike()}
@@ -109,7 +112,10 @@ export default function MusicItem({ musicObject }: { musicObject: any }) {
               )}
             </button>
 
-            <button className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition">
+            <button
+              onClick={() => setMusic(musicObject)}
+              className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"
+            >
               <MdPlayCircleFilled size={50} />
             </button>
 

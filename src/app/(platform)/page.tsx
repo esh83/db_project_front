@@ -19,7 +19,6 @@ export default function Home() {
   }, []);
   return (
     <>
-      <PlayMusic />
       <h1 className="text-5xl  font-bold text-gray-200 mb-9">Made for you</h1>
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {suggestedMusics.map((ms: any) => (

@@ -11,7 +11,7 @@ export default function MusicRowItem({
       <td className="flex justify-center items-center">
         <p className="mr-2">1</p>
         <img
-          src={data.image_url ?? "/img/music.png"}
+          src={data.image_url ?? "/img/music.jpg"}
           alt="dead girl song poster"
           height="50px"
           width="50px"

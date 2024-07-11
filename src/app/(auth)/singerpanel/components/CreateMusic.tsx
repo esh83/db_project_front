@@ -116,14 +116,14 @@ export default function CreateMusic() {
                         htmlFor={field[0]}
                         className="block mb-2 text-sm font-medium text-gray-900 "
                       >
-                        Your {field[0]}
+                         {field[0]}
                       </label>
                       <input
                         type={"file"}
                         name={field[0]}
                         id={field[0]}
                         className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        placeholder={`enter your ${field[0]}`}
+                        placeholder={`enter ${field[0]}`}
                         required
                         onChange={(e) =>
                           setFormData((prevData: any) => ({
@@ -141,7 +141,7 @@ export default function CreateMusic() {
                         htmlFor={field[0]}
                         className="block mb-2 text-sm font-medium text-gray-900 "
                       >
-                        Your {field[0]}
+                         {field[0]}
                       </label>
                       {field[0] == "album_id" && (
                         <button
@@ -161,7 +161,7 @@ export default function CreateMusic() {
                         name={field[0]}
                         id={field[0]}
                         className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        placeholder={`enter your ${field[0]}`}
+                        placeholder={`enter ${field[0]}`}
                         required
                         value={field[1] as any}
                         onChange={(e) =>

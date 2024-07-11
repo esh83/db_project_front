@@ -1,21 +1,59 @@
+"use client";
+import Image from "next/image";
+import { useContext, useEffect, useRef, useState } from "react";
+import { MdPlayArrow } from "react-icons/md";
+import useSound from "use-sound";
+import { musicPlayCtx } from "../context/MusicPlayProvider";
+
 export default function PlayMusic() {
+  const [music] = useContext(musicPlayCtx);
+
+  const [play, { pause, duration, stop }] = useSound(`${music?.audio_url}`);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  useEffect(() => {
+    if (duration && elapsedTime === Math.ceil(duration / 1000)) {
+      stop();
+      pauseTimer();
+      setElapsedTime(0);
+      setIsPlaying(false);
+    }
+  }, [elapsedTime, duration, stop]);
+  const intervalRef = useRef<any>(null);
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      setElapsedTime((prev) => prev + 1);
+    }, 1000);
+  };
+  const pauseTimer = () => {
+    clearInterval(intervalRef.current);
+  };
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+  if (!music) return null;
   return (
     <div
       className="z-50 fixed left-0 bottom-0 right-0 h-auto flex justify-between flex-row items-center md:flex"
       style={{ backgroundColor: "#181818", borderTop: "1px solid #282828" }}
     >
       <div className="mx-4 my-4 flex justify-start items-center w-1/3">
-        <img
-          src="https://spotify-artist-playlist-tailwind-css-ui.netlify.app/images/heading-home.jpg"
+        <Image
+          src={music.image_url ?? "/img/music.jpg"}
           alt="heading home song by alan walker"
+          width={50}
+          height={50}
           className="shadow-2xl rounded-md"
         />
         <div className="flex flex-col justify-center m-4">
           <h5 className="text-white font-semi-bold text-sm text-left">
-            Heading Home
+            {music.name}
           </h5>
           <p className="text-gray-400 font-semi-bold text-xs">
-            Alan Walker, Ruben
+            {music.singer_name}
           </p>
         </div>
         <div className="text-gray-300 flex justify-center items-center">
@@ -34,10 +72,10 @@ export default function PlayMusic() {
             height="16"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g fill="currentColor" fill-rule="evenodd">
+            <g fill="currentColor" fillRule="evenodd">
               <path
                 d="M1 3v9h14V3H1zm0-1h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"
-                fill-rule="nonzero"
+                fillRule="nonzero"
               ></path>
               <path d="M10 8h4v3h-4z"></path>
             </g>
@@ -64,18 +102,40 @@ export default function PlayMusic() {
           >
             <path d="M13 2.5L5 7.119V3H3v10h2V8.881l8 4.619z"></path>
           </svg>
-          <button className="bg-white rounded-full w-8 h-8 flex justify-center items-center">
-            <svg
-              role="img"
-              height="16"
-              width="16"
-              viewBox="0 0 16 16"
-              className="Svg-ulyrgf-0 hJgLcF"
+
+          {isPlaying ? (
+            <button
+              onClick={() => {
+                pause();
+                setIsPlaying(false);
+                pauseTimer();
+              }}
+              className="bg-white rounded-full w-8 h-8 flex justify-center items-center"
             >
-              <path fill="none" d="M0 0h16v16H0z"></path>
-              <path d="M3 2h3v12H3zM10 2h3v12h-3z"></path>
-            </svg>
-          </button>
+              <svg
+                role="img"
+                height="16"
+                width="16"
+                viewBox="0 0 16 16"
+                className="Svg-ulyrgf-0 hJgLcF"
+              >
+                <path fill="none" d="M0 0h16v16H0z"></path>
+                <path d="M3 2h3v12H3zM10 2h3v12h-3z"></path>
+              </svg>
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                play();
+                setIsPlaying(true);
+                startTimer();
+              }}
+              className="bg-white rounded-full w-8 h-8 flex justify-center items-center"
+            >
+              <MdPlayArrow size={20} className="text-gray-900" />
+            </button>
+          )}
+
           <svg
             className="fill-current"
             role="img"
@@ -96,11 +156,22 @@ export default function PlayMusic() {
           </svg>
         </div>
         <div className="flex flex-row justify-between items-center w-full">
-          <div className="text-gray-300 text-xs text-center">1:41</div>
-          <div className="bg-gray-600 flex w-full h-full border border-gray-600 rounded-full mx-4">
-            <div className="bg-gray-300 border border-gray-300 rounded-full w-1/2 h-1"></div>
+          <div className="text-gray-300 text-xs text-center">
+            {formatTime(elapsedTime)}
           </div>
-          <div className="text-gray-300 text-xs text-center">3:04</div>
+          <div className="bg-gray-600 flex w-full h-full border border-gray-600 rounded-full mx-4">
+            <div
+              className="bg-gray-300 border border-gray-300 rounded-full h-1"
+              style={{
+                width: duration
+                  ? `${(elapsedTime / (duration / 1000)) * 100}%`
+                  : "1%",
+              }}
+            ></div>
+          </div>
+          <div className="text-gray-300 text-xs text-center">
+            {duration && formatTime(Math.ceil(duration / 1000))}
+          </div>
         </div>
       </div>
       <div className="flex flex-row justify-end items-center w-1/3 mr-4">

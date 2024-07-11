@@ -21,7 +21,7 @@ export default function PlaylistItem({
       href={`/playlists/${id}`}
     >
       <Image
-        src={image_url ?? "/img/music.png"}
+        src={image_url ?? "/img/music.jpg"}
         className="w-full rounded shadow"
         alt="image"
         width={200}

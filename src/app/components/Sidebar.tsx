@@ -44,20 +44,10 @@ export default function Sidebar() {
     <nav className=" rounded-md w-72 h-screen flex-col justify-between fixed left-0z-10 ">
       <div className=" bg-white h-full border">
         <div className="flex  justify-center py-10 shadow-sm pr-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-14 w-14 text-indigo-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
-            />
-          </svg>
+          <img
+            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+            className="w-14 w-14"
+          />
           <div className="pl-2">
             <p className="text-2xl font-bold text-indigo-600">MUSIC</p>
             <span className="text-xs block text-gray-800">PLATFORM</span>
