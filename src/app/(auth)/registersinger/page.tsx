@@ -8,24 +8,35 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 
-export default function Register() {
+export default function RegisterSinger() {
   const [formData, setFormData] = useState<TRegisterPayload>({
     username: "",
     password: "",
     email: "",
     address: "",
     birthdate: "",
+    image: null,
   });
   const [startDate, setStartDate] = useState<Date | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const bodyFormData = new FormData();
+    bodyFormData.append("username", formData.username);
+    bodyFormData.append("password", formData.password);
+    bodyFormData.append("email", formData.email);
+    bodyFormData.append("address", formData.address);
+    bodyFormData.append("birthdate", formData.birthdate);
+    bodyFormData.append("image", formData.image);
     try {
-      const res = await axiosCustom.post("auth/register", formData);
+      const res = await axiosCustom({
+        method: "post",
+        url: "auth/singer/register",
+        data: bodyFormData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       toast.success("registered successfully");
     } catch (err) {
-      console.log(err);
-      
       toast.error("error happened");
     }
   };
@@ -62,6 +73,30 @@ export default function Register() {
               onSubmit={(e) => handleSubmit(e)}
             >
               {Object.entries(formData).map((field) => {
+                if (field[0] === "image") {
+                 return  <div key={field[0]}>
+                    <label
+                      htmlFor={field[0]}
+                      className="block mb-2 text-sm font-medium text-gray-900 "
+                    >
+                      Your {field[0]}
+                    </label>
+                    <input
+                      type={"file"}
+                      name={field[0]}
+                      id={field[0]}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                      placeholder={`enter your ${field[0]}`}
+                      required
+                      onChange={(e) =>
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          image: e.target.files?.[0],
+                        }))
+                      }
+                    />
+                  </div>;
+                }
                 if (field[0] === "birthdate") {
                   return (
                     <div key={field[0]}>

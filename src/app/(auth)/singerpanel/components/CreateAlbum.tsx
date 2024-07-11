@@ -1,38 +1,30 @@
 "use client";
 
-import { TLoginPayload } from "@/app/schema/auth.scheme";
-import { axiosCustom, isAuth } from "@/app/utils/config";
+import { axiosCustom } from "@/app/utils/config";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
-import Cookies from "js-cookie";
 
-export default function Login() {
-  const router = useRouter();
-  useEffect(() => {
-    if (isAuth()) router.replace("/");
-  }, [router]);
-
-  const [formData, setFormData] = useState<TLoginPayload>({
-    username: "",
-    password: "",
+export default function CreateAlbum() {
+  const [formData, setFormData] = useState<any>({
+    name: "",
   });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axiosCustom.post("auth/login", formData);
-      Cookies.set("token", res.data.token);
-      toast.success("login successfully");
-      router.replace("/");
+      const res = await axiosCustom.post("singer/addalbum", formData);
+      toast.success("added successfully");
     } catch (err) {
-      toast.error("username or password wrong");
+      toast.error("error happened");
     }
   };
 
   return (
     <section className="bg-gray-50 py-10">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  lg:py-0">
         <a
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
@@ -47,7 +39,7 @@ export default function Login() {
         <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Sign in to your account
+              add new album
             </h1>
             <form
               className="space-y-4 md:space-y-6"
@@ -73,9 +65,9 @@ export default function Login() {
                       className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                       placeholder={`enter your ${field[0]}`}
                       required
-                      value={field[1]}
+                      value={field[1] as any}
                       onChange={(e) =>
-                        setFormData((prevData) => ({
+                        setFormData((prevData: any) => ({
                           ...prevData,
                           [field[0]]: e.target.value,
                         }))
@@ -84,45 +76,13 @@ export default function Login() {
                   </div>
                 );
               })}
-              <div className="flex items-center justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 "
-                      required
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="remember" className="text-gray-500">
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-primary-600 hover:underline "
-                >
-                  Forgot password?
-                </a>
-              </div>
+
               <button
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
-                Sign in
+                Add album
               </button>
-              <p className="text-sm font-light text-gray-500 ">
-                Don’t have an account yet?{" "}
-                <Link
-                  href="/register"
-                  className="font-medium text-primary-600 hover:underline "
-                >
-                  Sign up
-                </Link>
-              </p>
             </form>
           </div>
         </div>
