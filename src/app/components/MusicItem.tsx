@@ -34,6 +34,8 @@ export default function MusicItem({ musicObject }: { musicObject: any }) {
       toast.success("added to play list");
     } catch (err) {
       toast.error("failed to add to paylist");
+      console.log(err);
+      
     }
   };
   const hanldeLike = async () => {
