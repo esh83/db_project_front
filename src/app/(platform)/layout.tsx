@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { isAuth } from "../utils/config";
 import { Toaster } from "react-hot-toast";
-import MusicItem from "../components/MusicItem";
-import PlayMusic from "../components/PlayMusic";
 import MusicPlayProvider from "../context/MusicPlayProvider";
+import PlayMusicWrapper from "../components/PlayMusicWrapper";
+import { SWRConfig } from "swr";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,16 +26,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MusicPlayProvider>
-          <Toaster />
-          <PlayMusic />
-          <Sidebar />
-          <div className="pl-72">
-            <div className="min-h-screen bg-gradient-to-t from-blue-200 to-indigo-900 px-5 py-10">
-              {children}
+        <SWRConfig value={{ revalidateOnMount: true }}>
+          <MusicPlayProvider>
+            <Toaster />
+            <PlayMusicWrapper />
+            <Sidebar />
+            <div className="pl-72">
+              <div className="min-h-screen bg-gradient-to-t from-blue-200 to-indigo-900 px-5 py-10">
+                {children}
+              </div>
             </div>
-          </div>
-        </MusicPlayProvider>
+          </MusicPlayProvider>
+        </SWRConfig>
       </body>
     </html>
   );

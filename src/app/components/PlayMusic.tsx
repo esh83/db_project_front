@@ -1,14 +1,19 @@
 "use client";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
-import { MdPlayArrow } from "react-icons/md";
+import {
+  MdArrowDownward,
+  MdArrowDropDown,
+  MdClose,
+  MdPlayArrow,
+} from "react-icons/md";
 import useSound from "use-sound";
 import { musicPlayCtx } from "../context/MusicPlayProvider";
 
 export default function PlayMusic() {
-  const [music] = useContext(musicPlayCtx);
+  const [music, setMusic] = useContext(musicPlayCtx);
 
-  const [play, { pause, duration, stop }] = useSound(`${music?.audio_url}`);
+  const [play, { pause, duration, stop }] = useSound(music?.audio_url);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -20,6 +25,24 @@ export default function PlayMusic() {
       setIsPlaying(false);
     }
   }, [elapsedTime, duration, stop]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      play();
+      startTimer();
+      setIsPlaying(true);
+    }, 100);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [music, play]);
+
+  useEffect(() => {
+    stop();
+    pauseTimer();
+    setElapsedTime(0);
+    setIsPlaying(false);
+  }, [music, stop]);
   const intervalRef = useRef<any>(null);
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
@@ -40,6 +63,15 @@ export default function PlayMusic() {
       className="z-50 fixed left-0 bottom-0 right-0 h-auto flex justify-between flex-row items-center md:flex"
       style={{ backgroundColor: "#181818", borderTop: "1px solid #282828" }}
     >
+      <button
+        onClick={() => {
+          stop();
+          setMusic(null);
+        }}
+        className="absolute -top-5 right-0 w-5 h-5  bg-white text-gray-900 flex justify-center items-center"
+      >
+        <MdClose />
+      </button>
       <div className="mx-4 my-4 flex justify-start items-center w-1/3">
         <Image
           src={music.image_url ?? "/img/music.jpg"}

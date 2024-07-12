@@ -1,16 +1,15 @@
 import Link from "next/link";
 import {
+  MdChat,
   MdFavoriteBorder,
   MdLogout,
+  MdOutlineAirplaneTicket,
+  MdOutlineChat,
   MdOutlineHome,
   MdOutlinePerson2,
-  MdOutlinePerson3,
-  MdOutlinePerson4,
+  MdOutlinePersonPin,
   MdOutlinePlaylistAdd,
-  MdPerson,
-  MdPerson2,
-  MdPerson3,
-  MdPersonOutline,
+  MdOutlineSearch,
 } from "react-icons/md";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,6 +20,11 @@ export default function Sidebar() {
       title: "Home",
       path: "/",
       icon: <MdOutlineHome size={20} />,
+    },
+    {
+      title: "my account",
+      path: "/account",
+      icon: <MdOutlinePerson2 size={20} />,
     },
     {
       title: "Playlists",
@@ -37,13 +41,33 @@ export default function Sidebar() {
       path: "/singers",
       icon: <MdOutlinePerson2 size={20} />,
     },
+    {
+      title: "chat",
+      path: "/chat",
+      icon: <MdOutlineChat size={20} />,
+    },
+    {
+      title: "users list",
+      path: "/users",
+      icon: <MdOutlinePersonPin size={20} />,
+    },
+    {
+      title: "concerts",
+      path: "/concerts",
+      icon: <MdOutlineAirplaneTicket size={20} />,
+    },
+    {
+      title: "search",
+      path: "/search",
+      icon: <MdOutlineSearch size={20} />,
+    },
   ];
   const router = useRouter();
 
   return (
     <nav className=" rounded-md w-72 h-screen flex-col justify-between fixed left-0z-10 ">
       <div className=" bg-white h-full border">
-        <div className="flex  justify-center py-10 shadow-sm pr-4">
+        <div className="flex  justify-center py-8 shadow-sm pr-4">
           <img
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
             className="w-14 w-14"

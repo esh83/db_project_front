@@ -2,9 +2,7 @@
 
 import Modal from "@/app/components/Modal";
 import { axiosCustom, isAuth } from "@/app/utils/config";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 
@@ -17,6 +15,7 @@ export default function CreateMusic() {
     genre: "",
     audio: null,
     image: null,
+    can_add_to_playlist: true,
   });
   const [albums, setAlbums] = useState([]);
   const [show, setShow] = useState(false);
@@ -44,6 +43,8 @@ export default function CreateMusic() {
     bodyFormData.append("genre", formData.genre);
     bodyFormData.append("audio", formData.audio);
     bodyFormData.append("image", formData.image);
+    bodyFormData.append("can_add_to_playlist", formData.can_add_to_playlist);
+    
     try {
       const res = await axiosCustom({
         method: "post",
@@ -55,7 +56,6 @@ export default function CreateMusic() {
     } catch (err) {
       toast.error("error happened");
       console.log(err);
-      
     }
   };
 
@@ -109,6 +109,32 @@ export default function CreateMusic() {
               onSubmit={(e) => handleSubmit(e)}
             >
               {Object.entries(formData).map((field) => {
+                if (field[0] == "can_add_to_playlist") {
+                  return (
+                    <div className="flex items-start" key={field[0]}>
+                      <div className="flex items-center h-5">
+                        <input
+                          id="remember"
+                          aria-describedby="remember"
+                          type="checkbox"
+                          className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 "
+                          checked={field[1] as boolean}
+                          onChange={(e) =>
+                            setFormData((prevData: any) => ({
+                              ...prevData,
+                              [field[0]]: !field[1],
+                            }))
+                          }
+                        />
+                      </div>
+                      <div className="ml-3 text-sm">
+                        <label htmlFor="remember" className="text-gray-500">
+                          Addable To Playlist
+                        </label>
+                      </div>
+                    </div>
+                  );
+                }
                 if (field[0] === "image" || field[0] === "audio") {
                   return (
                     <div key={field[0]}>
@@ -116,7 +142,7 @@ export default function CreateMusic() {
                         htmlFor={field[0]}
                         className="block mb-2 text-sm font-medium text-gray-900 "
                       >
-                         {field[0]}
+                        {field[0]}
                       </label>
                       <input
                         type={"file"}
@@ -141,7 +167,7 @@ export default function CreateMusic() {
                         htmlFor={field[0]}
                         className="block mb-2 text-sm font-medium text-gray-900 "
                       >
-                         {field[0]}
+                        {field[0]}
                       </label>
                       {field[0] == "album_id" && (
                         <button

@@ -1,4 +1,6 @@
-
+import { musicPlayCtx } from "@/app/context/MusicPlayProvider";
+import { useContext } from "react";
+import Image from "next/image";
 export default function MusicRowItem({
   data,
   albumname,
@@ -6,15 +8,19 @@ export default function MusicRowItem({
   data: any;
   albumname: any;
 }) {
+  const [music, setMusic] = useContext(musicPlayCtx);
   return (
-    <tr className="flex justify-around items-center text-gray-400 m-2 font-mono hover:bg-gray-200 hover:bg-opacity-10 rounded-md py-2">
+    <tr
+      onClick={() => setMusic(data)}
+      className="flex cursor-pointer justify-around items-center text-gray-400 m-2 font-mono hover:bg-gray-200 hover:bg-opacity-10 rounded-md py-2"
+    >
       <td className="flex justify-center items-center">
         <p className="mr-2">1</p>
-        <img
+        <Image
           src={data.image_url ?? "/img/music.jpg"}
           alt="dead girl song poster"
-          height="50px"
-          width="50px"
+          height={50}
+          width={50}
         />
         <div className="ml-3">
           <p className="text-white font-semi-bold">{data.name}</p>

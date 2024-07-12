@@ -1,37 +1,34 @@
 "use client";
 
 import Modal from "@/app/components/Modal";
-import MusicItem from "@/app/components/MusicItem";
 import { axiosCustom } from "@/app/utils/config";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
-import { MdAdd, MdAddCircleOutline } from "react-icons/md";
+import { MdAddCircleOutline } from "react-icons/md";
 import PlaylistItem from "./components/PlaylistItem";
-import { useRouter } from "next/navigation";
+import useSWR from "swr";
 
 export default function PlayLists() {
   const [show, setShow] = useState(false);
-  const [list, setList] = useState([]);
+  const {
+    data: list,
+    error,
+    mutate,
+    isLoading,
+  } = useSWR<any>(["playlist/user"], ([url]) =>
+    axiosCustom.get(url).then((res) => res.data)
+  );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axiosCustom.get("playlist/user");
-        console.log(res);
-        setList(res.data);
-      } catch (err) {
-        setList([]);
-      }
-    })();
-  }, []);
   const [newPlayListName, setNewPlayListName] = useState("");
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (newPlayListName === "") return;
     try {
       const res = await axiosCustom.post("addplaylist", {
         playlist_name: newPlayListName,
       });
       toast.success("created successfully");
+      mutate();
     } catch (err) {
       toast.error("error in creating playlist");
     } finally {
@@ -76,7 +73,7 @@ export default function PlayLists() {
         </button>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        {list.map((l: any) => {
+        {list?.map((l: any) => {
           return (
             <PlaylistItem
               id={l.id}

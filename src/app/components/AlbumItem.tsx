@@ -9,7 +9,7 @@ export default function AlbumItem({ item }: { item: any }) {
     >
       <Image
         src={item.image_url ?? "/img/music.jpg"}
-        className="w-full rounded shadow"
+        className="w-full max-h-60 rounded shadow"
         alt="image"
         width={200}
         height={200}
