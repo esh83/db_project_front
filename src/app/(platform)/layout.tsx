@@ -29,6 +29,7 @@ export default function RootLayout({
         <SWRConfig value={{ revalidateOnMount: true }}>
           <MusicPlayProvider>
             <Toaster />
+            <NextTopLoader showSpinner={false} color="#818cf8" />
             <PlayMusicWrapper />
             <Sidebar />
             <div className="pl-72">
